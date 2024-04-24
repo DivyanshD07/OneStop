@@ -1,0 +1,25 @@
+.Notescard{
+    color: black;
+    height: 17vh;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    transition: 1s;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5vh;
+}
+
+.Notescard h1{
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.Notescard:hover{
+    background-color: aqua;
+    transform: scale(1.08);
+    cursor: pointer;
+}
