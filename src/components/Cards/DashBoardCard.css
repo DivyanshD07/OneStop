@@ -1,0 +1,27 @@
+.card{
+    color: black;
+    height: 60vh;
+    width: 60%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    transition: width 0.5s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card h1{
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card:hover{
+    width: 100%;
+    cursor: pointer;
+    background-color: aqua;
+    box-shadow: 0 2px 4px green;
+    padding: 16px;
+    transition: width 0.5s ease-in;
+}

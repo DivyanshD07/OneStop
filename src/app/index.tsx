@@ -1,7 +1,6 @@
-import Login from "./login/page";
-import MyNavbar from "../components/Navbar";
+import Hero from "./DashBoard/page";
+import Navbar from "../components/Navbar";
 import './globals.css';
 
-export {
-    
-}
+export {default as Home} from './page';
+export {default as RootLayout} from './layout';
