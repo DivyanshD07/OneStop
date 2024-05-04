@@ -14,7 +14,7 @@ const MyNavbar = () => {
     // Update state to reflect logged out state
     setIsAuthenticated(false);
     // Redirect user to login page
-    router.push('/login'); // You can use router.push('/login') if you're using Next.js router
+    router.push('/'); // You can use router.push('/login') if you're using Next.js router
   };
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const MyNavbar = () => {
 
   return (
     <div className="flex flex-row justify-around items-center py-4 mt-5 mb-5">
-      <Link href="/">
+      <Link href="/DashBoard">
         <h1 className="text-4xl font-bold mb-5">OneStop</h1>
       </Link>
       <div className="flex flex-row gap-4 items-center justify-center">
@@ -39,7 +39,7 @@ const MyNavbar = () => {
               <div className="mr-2">
                 <img src="/assets/login.png" width={20} height={20} alt="login" />
               </div>
-              <Link href="/login">Login</Link>
+              <Link href="/">Login</Link>
             </div>
             <div className="bg-gray-800 hover:bg-gray-700 flex items-center border-0 rounded-xl px-3 py-2">
               <div className="mr-2">
