@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { FaFacebook, FaGoogle, FaLinkedin, FaLock, FaRegEnvelope } from 'react-icons/fa6';
 import { FaFacebookF } from "react-icons/fa";
 import Link from "next/link";
 import axios from 'axios';
-import { useRouter } from 'next/router'; // Import useRouter for redirection
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +16,31 @@ const SignUpForm = () => {
 
   const [showActivateMessage, setShowActivateMessage] = useState(false); // State to control message visibility
   const router = useRouter(); // useRouter hook for redirection
+
+  // useEffect(() => {
+  //   // Use router events to track route changes
+  //   const handleRouteChangeStart = (url) => {
+  //     // Execute your code here
+  //     console.log('Route change started:', url);
+  //   };
+
+  //   // Set router readiness state to true when router is ready
+  //   const handleRouterReady = () => {
+  //     setRouterReady(true);
+  //   };
+
+  //   // Listen for route change start
+  //   router.events.on('routeChangeStart', handleRouteChangeStart);
+
+  //   // Listen for router readiness
+  //   router.events.on('routeChangeComplete', handleRouterReady);
+
+  //   // Cleanup: remove event listeners
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChangeStart);
+  //     router.events.off('routeChangeComplete', handleRouterReady);
+  //   };
+  // }, [router]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,7 +79,20 @@ const SignUpForm = () => {
           <div className="flex flex-col gap-2 justify-center items-center p-1">
             {showActivateMessage && <p>Activate your account</p>} {/* Show activation message */}
             <form onSubmit={handleSubmit}>
-              {/* Your input fields */}
+              <div className='flex mb-2 flex-row gap-4 justify-center items-center'>
+                <div>
+                  <input type="text" id="firstName" name="firstName" placeholder='firstname' required className='bg-dark-grey border-b border-gray-200 focus:outline-none focus:border-blue-600 w-full px-4 py-2 text-black' onChange={handleChange} />
+                </div>
+                <div>
+                  <input type="text" id="lastName" name="lastName" placeholder='lastname' required className='bg-dark-grey border-b border-gray-200 focus:outline-none focus:border-blue-600 w-full px-4 py-2 text-black' onChange={handleChange} />
+                </div>
+              </div>
+              <div className='mb-2'>
+                <input type="email" id="email" name="email" placeholder='email' required className='bg-dark-grey border-b border-gray-200 focus:outline-none focus:border-blue-600 w-full px-4 py-2 text-black' onChange={handleChange} />
+              </div>
+              <div>
+                <input type="password" id="password" name="password" placeholder='password' required className='bg-dark-grey border-b border-gray-200 focus:outline-none focus:border-blue-600 w-full px-4 py-2 text-black' onChange={handleChange} />
+              </div>
               <button type="submit" className="text-black border-2 py-1 px-5 rounded-2xl mt-1">Sign up</button>
             </form>
           </div>
