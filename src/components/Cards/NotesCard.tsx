@@ -3,12 +3,13 @@ import './NotesCard.css';
 import React from 'react';
 import Link from 'next/link';
 // onClick: () => void
-const Card = (props: { department: string; }) => {
+const Card = (props: { department?: string; }) => {
+  const departmentName = props.department ? props.department.toLowerCase() : props.department;
   return (
-    <Link href={`/course?department=${props.department.toLowerCase()}`}>
+    <Link href={`/course?department=${departmentName}`}>
        {/* onClick={props.onClick} */}
       <div className="Notescard">
-        <h1>{props.department}</h1>
+        <h1>{departmentName}</h1>
       </div>
     </Link>
   );
