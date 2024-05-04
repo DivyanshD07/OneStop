@@ -22,7 +22,7 @@ const Login = () => {
       // If login successful, store JWT token in local storage
       localStorage.setItem('token', response.data.jwt);
       // Redirect user to desired page, e.g., dashboard
-      router.push('/');
+      router.push('/DashBoard');
     } catch (error) {
       alert('Login failed, try again');
       console.error('Login failed:', error);
@@ -32,7 +32,7 @@ const Login = () => {
 
   return (
     <main className="flex items-center justify-center w-full flex-1 px-20 text-center bg-black">
-      <div className="bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl flex-row">
+      <div className="bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl flex-row">
         <div className="flex flex-col w-3/5 justify-center items-center p-5 hoveranimationsignin">
           <p className="text-black font-bold md:text-2xl mb-2">Sign in to Account</p>
           <div className="border-2 w-10 border-blue-700 inline-block mb-2"></div>
