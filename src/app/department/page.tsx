@@ -6,7 +6,7 @@ import axios from 'axios'; // Import axios
 import { useRouter } from 'next/router';
 
 export default function Home() {
-    const router = useRouter();
+    // const router = useRouter();
 
     const [showForm, setShowForm] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -16,6 +16,7 @@ export default function Home() {
     useEffect(() => {
         const fetchDepartmentData = async () => {
             try {
+                console.log("hello from frontend");
                 const token = localStorage.getItem('token');
                 // Make a GET request to your API endpoint to fetch department data
                 const response = await axios.get('http://localhost:8080/api/v1/departments', {
@@ -23,8 +24,14 @@ export default function Home() {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                if (response.data.success && response.data.departments){
+                    const departmentNames = response.data.departments.map((department: any) => department.name);
                 // Set department data in state
-                setDepartmentData(response.data);
+                setDepartmentData(departmentNames);
+                } else {
+                    console.error('error: response does not contain departments');
+                }
+                
             } catch (error) {
                 console.error('Error fetching department data:', error);
             }
