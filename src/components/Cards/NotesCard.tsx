@@ -1,22 +1,17 @@
-import React from 'react';
+
 import './NotesCard.css';
+import React from 'react';
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
-
-
-
-const card = (props: { department: string }) => {
-
-  // const router = useRouter();
-  // const handleClick = (props: { service: string }) => {
-  //   router.push(`./${props.service.toLowerCase()}`); 
-  // }
-  
+// onClick: () => void
+const Card = (props: { department: string; }) => {
   return (
-      <Link href={`/${props.department.toLowerCase()}`} className="Notescard">
+    <Link href={`/course?department=${props.department.toLowerCase()}`}>
+       {/* onClick={props.onClick} */}
+      <div className="Notescard">
         <h1>{props.department}</h1>
-      </Link>
-  )
-}
+      </div>
+    </Link>
+  );
+};
 
-export default card;
+export default Card;

@@ -21,7 +21,8 @@
     width: 100%;
     cursor: pointer;
     background-color: aqua;
-    box-shadow: 0 2px 4px green;
+    border: 0px solid;
+    box-shadow: 5px green;
     padding: 16px;
     transition: width 0.5s ease-in;
 }

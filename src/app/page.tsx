@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import DashBoard from "./DashBoard/page";
 import './globals.css';
+import Department from "./department/page";
 import Login from "./login/page";
 import { useRouter } from "next/router";
 
