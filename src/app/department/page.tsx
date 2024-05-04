@@ -2,46 +2,36 @@
 import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Card from "@/components/Cards/NotesCard";
+import axios from 'axios'; // Import axios
 import { useRouter } from 'next/router';
 
 export default function Home() {
-
-    // const router = useRouter();
-
-
+    const router = useRouter();
 
     const [showForm, setShowForm] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState("");
-    const [departmentData, setDepartmentData] = useState([
-        {
-            department: "Technology",
-        },
-        {
-            department: "Management",
-        },
-        {
-            department: "Bio Technology",
-        },
-        {
-            department: "Philosophy",
-        },
-        {
-            department: "Others",
-        },
-    ]);
+    const [departmentData, setDepartmentData] = useState<{ department: string }[]>([]);
 
-    // Load departmentData from localStorage on initial render
+    // Load departmentData from the API on initial render
     useEffect(() => {
-        const savedData = localStorage.getItem('departmentData');
-        if (savedData) {
-            setDepartmentData(JSON.parse(savedData));
-        }
+        const fetchDepartmentData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                // Make a GET request to your API endpoint to fetch department data
+                const response = await axios.get('http://localhost:8080/api/v1/departments', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                // Set department data in state
+                setDepartmentData(response.data);
+            } catch (error) {
+                console.error('Error fetching department data:', error);
+            }
+        };
+
+        fetchDepartmentData(); // Call the function to fetch department data
     }, []);
-
-    // Update localStorage whenever departmentData changes
-    useEffect(() => {
-        localStorage.setItem('departmentData', JSON.stringify(departmentData));
-    }, [departmentData]);
 
     const handleAddDepartment = () => {
         if (selectedDepartment) {
@@ -51,11 +41,6 @@ export default function Home() {
         }
     };
 
-    
-    // const handleDepartmentClick = (department:string) => {
-    //     router.push(`/course?department=${encodeURIComponent(department)}`);
-    // };
-
     return (
         <div className="w-full flex flex-col items-center justify-center text-black">
             <div className="mb-8 w-3/4 flex flex-row items-center justify-around">
@@ -64,8 +49,7 @@ export default function Home() {
             </div>
             <div className="w-1/2 grid grid-cols-2 gap-4">
                 {departmentData.map((department, index) => (
-                    // onClick={() => handleDepartmentClick(department.department)} 
-                    <Card key={index} {...department} /> 
+                    <Card key={index} {...department} />
                 ))}
             </div>
 
