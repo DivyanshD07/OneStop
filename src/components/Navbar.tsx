@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const MyNavbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
-  
   // Function to handle logout
   const handleLogout = () => {
     // Clear authentication status (e.g., remove token from local storage)
@@ -17,6 +16,15 @@ const MyNavbar = () => {
     // Redirect user to login page
     router.push('/login'); // You can use router.push('/login') if you're using Next.js router
   };
+
+  useEffect(() => {
+    // Check if token exists in local storage
+    const token = localStorage.getItem('token');
+    if (token) {
+      // User is authenticated
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   return (
     <div className="flex flex-row justify-around items-center py-4 mt-5 mb-5">
