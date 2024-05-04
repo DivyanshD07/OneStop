@@ -20,7 +20,7 @@ const Login = () => {
         password
       });
       // If login successful, store JWT token in local storage
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.jwt);
       // Redirect user to desired page, e.g., dashboard
       router.push('/');
     } catch (error) {
