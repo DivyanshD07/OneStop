@@ -39,10 +39,9 @@ const Login = () => {
           {/* <div className="flex flex-row justify-center items-centre mb-3 mt-2">
             
           </div> */}
-          <p className="text-black opacity-50 mb-1">or use your email account</p>
           <div className="flex flex-col gap-2 justify-center items-center p-1">
             <div className="bg-gray-100 w-full p-2 flex items-center border-0 rounded-md">
-              <FaRegEnvelope className="text-gray-400 m-2" /> 
+              <FaRegEnvelope className="text-gray-400 m-2" />
               <input
                 type="email"
                 placeholder="email"
@@ -52,7 +51,7 @@ const Login = () => {
               />
             </div>
             <div className="bg-gray-100 w-full p-2 flex items-center border-0 rounded-md">
-              <FaLock className="text-gray-400 m-2" /> 
+              <FaLock className="text-gray-400 m-2" />
               <input
                 type="password"
                 placeholder="Password"
@@ -61,14 +60,15 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button className="text-black border-2 py-1 px-5 rounded-2xl mt-1" onClick={handleLogin}>
+            
+            <button className="text-black border-2 py-1 px-5 hover:bg-blue-600 hover:text-white rounded-2xl mt-1" onClick={handleLogin}>
               Sign in
             </button>
           </div>
         </div>
         <div className="w-2/5 bg-[#5663ff] rounded-tr-2xl rounded-br-2xl py-36 px-12 flex flex-col items-center justify-center hoverAnimationsignup">
-          <h2 className="text-white font-bold text-3xl mb-2">Create Your Account!</h2>
-          <Link href="/signup" className="flex flex-col gap-4 border-2 rounded-full px-2 py-1">Sign up</Link>
+          <h2 className="text-white font-bold text-3xl mb-3">Create Your Account!</h2>
+          <button className="flex flex-col bg-blue-400 text-white gap-4 rounded-full hover:bg-white hover:text-black px-3 py-1"><Link href="/signup" >Sign up</Link></button>
         </div>
       </div>
     </main>

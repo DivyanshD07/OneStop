@@ -47,11 +47,16 @@ const Faqs = () => {
   };
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col w-3/4">
+      <div className="flex flex-row justify-around items-center w-full mt-8 mb-3">
       <div className="flex justify-center mb-2 font-bold text-3xl">
         Discussion Forum
       </div>
-      <div className={`m-auto flex flex-wrap w-3/4`}>
+      <button className="border text-white bg-slate-600 border-solid-2 px-4 py-1 rounded hover:bg-slate-500 hover:text-black">
+        Ask a question
+      </button>
+      </div>
+      <div className={`m-auto flex flex-wrap w-full`}>
         <div className={`flex w-full flex-col md:w-[100%]`}>
           {faq.map((item, index) => (
             <div

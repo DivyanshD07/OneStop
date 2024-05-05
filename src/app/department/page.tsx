@@ -70,12 +70,12 @@ export default function Home() {
         <div className="w-full flex flex-col items-center justify-center text-black">
             <div className="mb-8 w-3/4 flex flex-row items-center justify-around">
                 <h1 className="text-2xl text-white">Department</h1>
-                <button onClick={() => setShowForm(true)} className="border text-white border-solid-2 px-4 py-1 rounded hover:bg-blue-400 hover:text-black">Upload</button>
+                <button onClick={() => setShowForm(true)} className="border bg-gray-800 text-white border-solid-2 px-4 py-1 rounded hover:bg-gray-700 hover:text-white">Upload</button>
             </div>
             <div className="w-1/2 grid grid-cols-2 gap-4">
-                {departmentData.map((department, index) => (
+                {/* {departmentData.map((department, index) => (
                     <Card key={index} department={department} />
-                ))}
+                ))} */}
             </div>
 
             {showForm && (

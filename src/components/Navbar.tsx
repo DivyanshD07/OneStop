@@ -35,13 +35,13 @@ const MyNavbar = () => {
         {/* Conditional rendering based on authentication status */}
         {!isAuthenticated ? (
           <div className="flex flex-row justify-between mr-8 gap-6">
-            <div className="bg-gray-800 hover:bg-gray-700 flex items-center border-0 rounded-xl px-3 py-2">
+            <div className="bg-gray-200 font-semibold text-black hover:bg-gray-400 flex items-center border-0 rounded-xl px-3 py-2">
               <div className="mr-2">
                 <img src="/assets/login.png" width={20} height={20} alt="login" />
               </div>
               <Link href="/">Login</Link>
             </div>
-            <div className="bg-gray-800 hover:bg-gray-700 flex items-center border-0 rounded-xl px-3 py-2">
+            <div className="bg-gray-200 font-semibold text-black hover:bg-gray-400 flex items-center border-0 rounded-xl px-3 py-2">
               <div className="mr-2">
                 <img src="/assets/user.png" width={20} height={20} alt="signup" />
               </div>
@@ -49,9 +49,9 @@ const MyNavbar = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-gray-800 hover:bg-gray-700 flex items-center border-0 rounded-xl px-3 py-2">
+          <div className="bg-gray-200 font-semibold text-black hover:bg-gray-400 text-black hover:bg-gray-400 flex items-center border-0 rounded-xl px-3 py-2">
             <div className="mr-2">
-              <img src="/assets/logout.png" width={20} height={20} alt="logout" />
+              <img src="/assets/user.png" width={20} height={20} alt="logout" />
             </div>
             <button onClick={handleLogout}>Logout</button>
           </div>
