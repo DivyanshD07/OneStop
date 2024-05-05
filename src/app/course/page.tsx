@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Import axios
 import CourseCard from '@/components/Cards/CourseCard';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Course = () => {
   const [showForm, setShowForm] = useState(false);
@@ -11,7 +10,7 @@ const Course = () => {
   const [coursesData, setCoursesData] = useState<string[]>([]);
   const [departmentName, setDepartmentName] = useState<string>(""); // State for department name
   const router = useRouter();
-  const { departmentId } = router.query;
+  const departmentId = useSearchParams();
 
   useEffect(() => {
     const fetchDepartmentData = async () => {
