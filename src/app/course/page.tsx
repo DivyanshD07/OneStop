@@ -3,19 +3,45 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Import axios
 import CourseCard from '@/components/Cards/CourseCard';
+import { useRouter } from 'next/router';
 
 const Course = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState("");
   const [coursesData, setCoursesData] = useState<string[]>([]);
-  const department = "Technology"; // Hardcoded department for now
+  const [departmentName, setDepartmentName] = useState<string>(""); // State for department name
+  const router = useRouter();
+  const { departmentId } = router.query;
+
+  useEffect(() => {
+    const fetchDepartmentData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:8080/api/v1/departments/${departmentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (response.data.success && response.data.department) {
+          setDepartmentName(response.data.department.name); // Set department name from the API response
+        } else {
+          console.error('Error: Response does not contain department');
+        }
+      } catch (error) {
+        console.error('Error fetching department:', error);
+      }
+    };
+
+    if (departmentId) {
+      fetchDepartmentData();
+    }
+  }, [departmentId]); // Fetch department data when departmentId changes
 
   useEffect(() => {
     const fetchCoursesData = async () => {
       try {
         const token = localStorage.getItem('token');
-        // Make a GET request to your API endpoint to fetch courses for the selected department
-        const response = await axios.get(`http://localhost:8080/api/v1/departments/${department}/courses`, {
+        const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -30,16 +56,17 @@ const Course = () => {
       }
     };
 
-    fetchCoursesData(); // Call the function to fetch courses data
-  }, [department]); // Add department to the dependencies array to fetch courses when department changes
+    if (departmentId) {
+      fetchCoursesData();
+    }
+  }, [departmentId]); // Fetch courses when departmentId changes
 
   const handleAddCourse = async () => {
     try {
       if (selectedCourses) {
         const token = localStorage.getItem('token');
-        // Make a POST request to upload a new course for the selected department
         const response = await axios.post(
-          `http://localhost:8080/api/v1/departments/${department}/courses`,
+          `http://localhost:8080/api/v1/courses/department/${departmentId}`,
           { name: selectedCourses },
           {
             headers: {
@@ -63,7 +90,7 @@ const Course = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center text-black">
       <div className="mb-8 w-3/4 flex flex-row items-center justify-around">
-        <h1 className="text-2xl text-white">Courses for {department}</h1>
+        <h1 className="text-2xl text-white">Courses for {departmentName}</h1> {/* Display department name */}
         <button onClick={() => setShowForm(true)} className="border text-white border-solid-2 px-4 py-1 rounded hover:bg-blue-400 hover:text-black">Upload</button>
       </div>
       <div>
