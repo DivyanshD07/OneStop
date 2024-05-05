@@ -37,31 +37,33 @@ export default function Home() {
 
     const handleAddDepartment = async () => {
         try {
-            if (selectedDepartment) {
-                const token = localStorage.getItem('token');
-                // Make a POST request to upload department data
-                const response = await axios.post(
-                    'http://localhost:8080/api/v1/departments/upload',
-                    { name: selectedDepartment },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
+            if (!selectedDepartment) {
+                return; // Do nothing if selectedDepartment is empty
+            }
+            
+            const token = localStorage.getItem('token');
+            const response = await axios.post(
+                'http://localhost:8080/api/v1/departments/upload',
+                { name: selectedDepartment },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
-                );
-                if (response.data.success) {
-                    // If department upload is successful, update department data in state
-                    setDepartmentData([...departmentData, selectedDepartment]);
-                    setSelectedDepartment("");
-                    setShowForm(false);
-                } else {
-                    console.error('Error: Department upload failed');
                 }
+            );
+            if (response.data.success) {
+                // If department upload is successful, update department data in state
+                setDepartmentData([...departmentData, selectedDepartment]);
+                setSelectedDepartment("");
+                setShowForm(false);
+            } else {
+                console.error('Error: Department upload failed');
             }
         } catch (error) {
             console.error('Error uploading department:', error);
         }
     };
+    
     
 
     return (
@@ -70,11 +72,11 @@ export default function Home() {
                 <h1 className="text-2xl text-white">Department</h1>
                 <button onClick={() => setShowForm(true)} className="border text-white border-solid-2 px-4 py-1 rounded hover:bg-blue-400 hover:text-black">Upload</button>
             </div>
-            {/* <div className="w-1/2 grid grid-cols-2 gap-4">
+            <div className="w-1/2 grid grid-cols-2 gap-4">
                 {departmentData.map((department, index) => (
                     <Card key={index} department={department} />
                 ))}
-            </div> */}
+            </div>
 
             {showForm && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
