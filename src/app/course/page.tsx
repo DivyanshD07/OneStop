@@ -1,46 +1,47 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import CourseCard from '@/components/Cards/CourseCard';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 
 const Course = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState("");
   const [coursesData, setCoursesData] = useState<string[]>([]);
-  const [departmentName, setDepartmentName] = useState<string>(""); // State for department name
+  const [departmentName, setDepartmentName] = useState<string>("");
   const router = useRouter();
-  const departmentId = useSearchParams();
+  const id = useSearchParams(); // Extract department ID from router query
 
   useEffect(() => {
     const fetchDepartmentData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8080/api/v1/departments/${departmentId}`, {
+        const response = await axios.get(`http://localhost:8080/api/v1/departments/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         if (response.data.success && response.data.department) {
-          setDepartmentName(response.data.department.name); // Set department name from the API response
+          setDepartmentName(response.data.department.name);
         } else {
-          console.error('Error: Response does not contain department');
+          console.error('Error: Department data not found');
         }
       } catch (error) {
         console.error('Error fetching department:', error);
       }
     };
 
-    if (departmentId) {
+    if (id) {
       fetchDepartmentData();
     }
-  }, [departmentId]); // Fetch department data when departmentId changes
+  }, [id]);
 
   useEffect(() => {
     const fetchCoursesData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
+        const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -48,24 +49,24 @@ const Course = () => {
         if (response.data.success && response.data.courses) {
           setCoursesData(response.data.courses);
         } else {
-          console.error('Error: Response does not contain courses');
+          console.error('Error: Courses data not found');
         }
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
 
-    if (departmentId) {
+    if (id) {
       fetchCoursesData();
     }
-  }, [departmentId]); // Fetch courses when departmentId changes
+  }, [id]);
 
   const handleAddCourse = async () => {
     try {
       if (selectedCourses) {
         const token = localStorage.getItem('token');
         const response = await axios.post(
-          `http://localhost:8080/api/v1/courses/department/${departmentId}`,
+          `http://localhost:8080/api/v1/courses/department/${id}`,
           { name: selectedCourses },
           {
             headers: {
@@ -89,7 +90,7 @@ const Course = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center text-black">
       <div className="mb-8 w-3/4 flex flex-row items-center justify-around">
-        <h1 className="text-2xl text-white">Courses for {departmentName}</h1> {/* Display department name */}
+        <h1 className="text-2xl text-white">Courses for {departmentName}</h1>
         <button onClick={() => setShowForm(true)} className="border text-white border-solid-2 px-4 py-1 rounded hover:bg-blue-400 hover:text-black">Upload</button>
       </div>
       <div>
@@ -108,7 +109,6 @@ const Course = () => {
               <option value="Course A">Course A</option>
               <option value="Course B">Course B</option>
               <option value="Course C">Course C</option>
-              {/* Add more courses as needed */}
             </select>
             <button onClick={handleAddCourse} className="bg-blue-500 text-white px-4 py-2 rounded-md">Add</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-4">Cancel</button>
