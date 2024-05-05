@@ -41,7 +41,7 @@ export default function Home() {
                 const token = localStorage.getItem('token');
                 // Make a POST request to upload department data
                 const response = await axios.post(
-                    'http://localhost:8080/api/v1/departments',
+                    'http://localhost:8080/api/v1/departments/upload',
                     { name: selectedDepartment },
                     {
                         headers: {
@@ -82,6 +82,8 @@ export default function Home() {
                         <h2 className="text-xl mb-4">Add Department</h2>
                         <select className="border border-gray-300 rounded-md p-2 mb-4" value={selectedDepartment} onChange={(e) => setSelectedDepartment(e.target.value)}>
                             <option value="">Select Department</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Management">Management</option>
                             <option value="Bio Technology">Bio Technology</option>
                             <option value="Physics">Physics</option>
                             <option value="Others">Others</option>
