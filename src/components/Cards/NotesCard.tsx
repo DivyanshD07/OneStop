@@ -1,18 +1,18 @@
-
 import './NotesCard.css';
 import React from 'react';
 import Link from 'next/link';
 // onClick: () => void
-const Card = (props: { department?: string; }) => {
-  const departmentName = props.department ? props.department.toLowerCase() : props.department;
-  return (
-    <Link href={`/course?department=${departmentName}`}>
+const Card = (props: { department: { id: number; name: string } }) => {
+  
+    return (
+      <Link href={`/course?departmentId=${props.department.id}`}>
        {/* onClick={props.onClick} */}
       <div className="Notescard">
-        <h1>{departmentName}</h1>
+        <h1>{props.department.name}</h1>
       </div>
     </Link>
-  );
+    )
+  ;
 };
 
 export default Card;
