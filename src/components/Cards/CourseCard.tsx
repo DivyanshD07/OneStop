@@ -1,22 +1,20 @@
+import './CCard.css';
 import React from 'react';
-import './NotesCard.css';
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
 
-
-
-const card = (props: { course: string }) => {
-
-  // const router = useRouter();
-  // const handleClick = (props: { service: string }) => {
-  //   router.push(`./${props.service.toLowerCase()}`); 
-  // }
-  
-  return (
-      <Link href={`/${props.course.toLowerCase()}`} className="Notescard">
-        <h1>{props.course}</h1>
-      </Link>
-  )
+interface CourseInfo {
+    id: number;
+    name: string;
 }
 
-export default card;
+const Card: React.FC<{ Course: CourseInfo }> = (props) => {
+    return (
+        <Link href={`/notes?courseId=${props.Course.id}`}>
+            <div className="Notescard">
+                <h1>{props.Course.name}</h1>
+            </div>
+        </Link>
+    );
+};
+
+export default Card;

@@ -3,10 +3,26 @@ import QAheader from "../../components/Cards/q&aCard";
 // import { Barlow } from "next/font/google";
 import Image from "next/image";
 import { useState } from "react";
+import { FaQuestionCircle } from "react-icons/fa";
+import { FaCircleQuestion, FaCloud, FaQuestion, FaThinkPeaks } from "react-icons/fa6";
 
 const Faqs = () => {
   const initialFaq = Array(6).fill(false);
   const [visibleFaq, setVisibleFaq] = useState(initialFaq);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState("");
+  const [questionData, setQuestionData] = useState([
+    {
+      id: 1,
+      title: "What is your name?",
+      desc: ["Lorem ipsum", "dolor sit amet", "helloworld"],
+    },
+    {
+      id: 2,
+      title: "College name?",
+      desc: ["SMVDU", "IIT"],
+    },
+  ]);
 
   const NumberCard = ({ num, active }: { num: number; active: boolean }) => {
     return (
@@ -23,19 +39,6 @@ const Faqs = () => {
     );
   };
 
-  const faq = [
-    {
-      id: 1,
-      title: "What is your name?",
-      desc: ["Lorem ipsum", "dolor sit amet","helloworld"],
-    },
-    {
-      id: 2,
-      title: "College name?",
-      desc: ["SMVDU","IIT"],
-    },
-  ];
-
   const handleShowFaq = (id: number) => {
     setVisibleFaq((visibleFaq) => {
       const temp = [...initialFaq];
@@ -46,19 +49,35 @@ const Faqs = () => {
     });
   };
 
+  const handleAddQuestion = () => {
+    if (selectedQuestion) {
+      const newQuestion = {
+        id: questionData.length + 1, // Generate a unique id
+        title: selectedQuestion,
+        desc: [] // Assuming you want to initialize an empty array for the description
+      };
+      setQuestionData([...questionData, newQuestion]);
+      setSelectedQuestion("");
+      setShowForm(false);
+    }
+  };
+
   return (
     <main className="flex flex-col w-3/4">
       <div className="flex flex-row justify-around items-center w-full mt-8 mb-3">
-      <div className="flex justify-center mb-2 font-bold text-3xl">
-        Discussion Forum
-      </div>
-      <button className="border text-white bg-slate-600 border-solid-2 px-4 py-1 rounded hover:bg-slate-500 hover:text-black">
-        Ask a question
-      </button>
+        <div className="flex justify-center mb-2 font-bold text-3xl">
+          Discussion Forum
+        </div>
+        <div className="bg-white font-semibold text-black hover:bg-blue-400 flex items-center border-0 rounded-xl px-3 py-2">
+                    <div className="mr-2">
+                        <FaCircleQuestion className='text-black' />
+                    </div>
+                    <button onClick={() => setShowForm(true)} className="">Ask a Question!</button>
+                </div>
       </div>
       <div className={`m-auto flex flex-wrap w-full`}>
         <div className={`flex w-full flex-col md:w-[100%]`}>
-          {faq.map((item, index) => (
+          {questionData.map((item, index) => (
             <div
               key={index}
               className={` border-collapse text-white border rounded-xl border-light-grey min-h-[8vw]  w-full flex flex-col p-[2vw] `}
@@ -104,6 +123,21 @@ const Faqs = () => {
           ))}
         </div>
       </div>
+      {
+        showForm && (
+          <div className="fixed top-1/4 left-1/2 w-1/4 h-1/2 bg-gray-900 flex border-2 border-white border-inherit justify-center items-start rounded-xl p-6">
+            <div className="flex flex-col w-full h-full bg-gray-900 bg-opacity-50">
+              <h1 className="text-xl">Ask a question</h1>
+              <div className="flex flex-row items-start w-full h-full mt-8 mb-3">
+                <input type="text" name="" id="" placeholder="Type your question here..." className="text-black rounded-xl h-full w-full" value={selectedQuestion} onChange={(e) => setSelectedQuestion(e.target.value)} />
+              </div>
+              <div className="flex flex-row justify-around items-center w-full mt-8 mb-3">
+                <button onClick={handleAddQuestion} className="bg-blue-500 text-white px-4 py-2 rounded-md">Add</button>
+                <button onClick={() => setShowForm(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-4">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
     </main>
   );
 };
@@ -171,7 +205,9 @@ const CardFooter = ({ reply, report }: { reply: string; report: string }) => {
         </button>
       )}
 
+
     </div>
+
   );
 };
 

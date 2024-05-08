@@ -49,7 +49,7 @@ const MyNavbar = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-gray-200 font-semibold text-black hover:bg-gray-400 text-black hover:bg-gray-400 flex items-center border-0 rounded-xl px-3 py-2">
+          <div className="bg-gray-200 font-semibold text-black hover:bg-gray-400 flex items-center border-0 rounded-xl px-3 py-2">
             <div className="mr-2">
               <img src="/assets/user.png" width={20} height={20} alt="logout" />
             </div>
