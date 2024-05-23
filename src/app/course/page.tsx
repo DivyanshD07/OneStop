@@ -5,38 +5,44 @@ import axios from 'axios';
 import Card from "@/components/Cards/CourseCard";
 import { FaUpload } from 'react-icons/fa6';
 
+interface CoursesInfo {
+    id: number;
+    name: string;
+}
+
 export default function Home() {
-    const router = useRouter();
     const departmentIdStr = useSearchParams().get('departmentId'); // Extract department ID from query parameters
     const departmentId = departmentIdStr ? parseInt(departmentIdStr) : null; // Convert string to integer
-
+    console.log(departmentId);
     const [showForm, setShowForm] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState("");
-    const [coursesData, setCoursesData] = useState<{ id: number; name: string; }[]>([]);
+    const [coursesData, setCoursesData] = useState<CoursesInfo[]>([]);
 
     useEffect(() => {
         const fetchCoursesData = async () => {
-            if (departmentId !== null) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:8080/api/v1/departments/${departmentId}/courses`, {
+                    const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
                     if (response.data.success && response.data.courses) {
-                        setCoursesData(response.data.courses);
+                        const CourseNames = response.data.courses.map((courses: any) => ({
+                            id: courses.id,
+                            name: courses.name,
+                        }));
+                        setCoursesData(CourseNames);
                     } else {
                         console.error('Error: Response does not contain courses');
                     }
                 } catch (error) {
                     console.error('Error fetching courses data:', error);
                 }
-            }
         };
 
         fetchCoursesData();
-    }, [departmentId]);
+    }, []);
 
     const handleAddCourse = async () => {
         if (selectedCourse) {
@@ -78,7 +84,7 @@ export default function Home() {
             </div>
             <div className="w-1/2 grid grid-cols-2 gap-4">
                 {coursesData.map((course) => (
-                    <Card key={course.id} course={course} />
+                    <Card key={course.id} Course={course} />
                 ))}
             </div>
 
