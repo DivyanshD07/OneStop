@@ -20,7 +20,7 @@
 .card:hover{
     width: 100%;
     cursor: pointer;
-    background-color: aqua;
+    background-color: #198cff;
     border: 0px solid;
     box-shadow: 5px green;
     padding: 16px;
