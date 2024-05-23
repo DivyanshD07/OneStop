@@ -3,6 +3,13 @@ import { useState, useEffect, use } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Card from "@/components/Cards/NotesCard";
 import { FaUpload } from 'react-icons/fa6';
+import axios from 'axios';
+
+interface NotesInfo {
+    id: number;
+    name: string;
+    download: string;
+}
 
 export default function Home() {
     const router = useRouter();
@@ -11,38 +18,42 @@ export default function Home() {
     const courseId = parseInt(lastcourseId); // Convert string to integer
     const [showForm, setShowForm] = useState(false);
     const [selectedNotes, setSelectedNotes] = useState("");
-    const [notesData, setNotesData] = useState<{ id: number; name: string; }[]>([]);
-
-    // Sample hardcoded data for departments and courses
-    const hardcodedNotesData = [
-        {
-            id: 1,
-            name: "Web Development",
-            notes: [
-                { id: 1, name: "Notes 1" },
-                { id: 2, name: "Notes 2" },
-                { id: 3, name: "Notes 3" },
-            ]
-        },
-        {
-            id: 5,
-            name: "Marketing",
-            notes: [
-                { id: 4, name: "Notes 1" },
-                { id: 5, name: "Notes 2" },
-                { id: 6, name: "Notes 3" },
-            ]
-
-        },
-    ];
+    const [notesData, setNotesData] = useState<NotesInfo[]>([]);
 
     useEffect(() => {
-        // Load coursesData for the selected department from hardcoded data on initial render
-        const coursesNotes = hardcodedNotesData.find(course => course.id == courseId);
-        if (coursesNotes) {
-            setNotesData(coursesNotes.notes);
-        }
-    }, [courseId]);
+        const fetchCoursesData = async () => {
+            if (courseId !== null) {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await axios.get(`http://localhost:8080/api/v1/notes/${courseId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    console.log("api response: ", response);
+                    console.log("response data: ", response.data);
+                    console.log("response succes: ", response.data.success);
+                    console.log("response note: ", response.data.notes);
+                    if (response.data.success && Array.isArray(response.data.notes)) {
+                        const notesNames = response.data.notes.map((notes: any) => ({
+                            id: notes.id,
+                            name: notes.fileName,
+                            download: notes.downloadUrl,
+                        }));
+                        setNotesData(notesNames);
+                        
+                    console.log("response data: ", response);
+                    } else {
+                        console.error('Error: Response does not contain courses');
+                    }
+                } catch (error) {
+                    console.error('Error fetching courses data:', error);
+                }
+            }
+        };
+
+        fetchCoursesData();
+    }, [courseId]); // Depend on departmentId to refetch when it changes
 
     const handleAddCourse = () => {
         if (selectedNotes) {
