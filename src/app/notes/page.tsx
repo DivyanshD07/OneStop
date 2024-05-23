@@ -17,7 +17,7 @@ export default function Home() {
     const courseId = courseIdStr ? parseInt(courseIdStr) : null;
 
     const [showForm, setShowForm] = useState(false);
-    const [selectedNotes, setSelectedNotes] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [notesData, setNotesData] = useState<NotesInfo[]>([]);
 
     useEffect(() => {
@@ -52,14 +52,18 @@ export default function Home() {
     }, [courseId]);
 
     const handleAddNotes = async () => {
-        if (selectedNotes) {
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.post(
-                    `http://localhost:8080/api/v1/departments/${courseId}/notes/upload`,
-                    { name: selectedNotes },
+                    `http://localhost:8080/api/v1/notes/${courseId}/upload`,
+                    formData,
                     {
                         headers: {
+                            'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${token}`
                         }
                     }
@@ -68,7 +72,7 @@ export default function Home() {
                 if (response.data.success) {
                     const newNote = response.data.note;
                     setNotesData([...notesData, newNote]);
-                    setSelectedNotes("");
+                    setSelectedFile(null);
                     setShowForm(false);
                 } else {
                     console.error('Error: Notes upload failed', response.data);
@@ -76,6 +80,12 @@ export default function Home() {
             } catch (error) {
                 console.error('Error uploading notes:', error);
             }
+        }
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            setSelectedFile(event.target.files[0]);
         }
     };
 
@@ -101,7 +111,11 @@ export default function Home() {
                     <div className="w-full h-full align-middle flex flex-col justify-start items-start gap-4">
                         <div className='text-xl'>Upload your notes here:</div>
                         <div className='w-full h-full top-1/2 left-1/2 border-2 border-dashed border-gray-400 rounded-lg'>
-                            <input type="file" className="w-full h-full top-1/2 left-1/2" />
+                            <input 
+                                type="file" 
+                                className="w-full h-full top-1/2 left-1/2" 
+                                onChange={handleFileChange}
+                            />
                         </div>
                         <div className='flex flex-row justify-between items-center'>
                             <button onClick={handleAddNotes} className="bg-blue-500 text-white px-4 py-2 rounded-md">Upload</button>
