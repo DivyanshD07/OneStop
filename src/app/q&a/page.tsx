@@ -21,30 +21,25 @@ const Faqs = () => {
 
   useEffect(() => {
     // Fetch questions from the API
-    
     const fetchQuestions = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get("http://localhost:8080/api/v1/questions", {
           headers: {
-              Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
-      });
-        
-      console.log('API Response:', response);
-      if (response.data.success && response.data.questions) {
-          const questionNames = response.data.questions.map((question: any) => ({
-              id: question.id,
-              name: question.name,
-          }));
-          setQuestionData(questionNames);
-      } else {
-          console.error('Error: Response does not contain courses', response.data);
+        });
+
+        console.log('API Response:', response);
+        if (response.data.success && response.data.questions) {
+          setQuestionData(response.data.questions);
+        } else {
+          console.error('Error: Response does not contain questions', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching questions data:', error);
       }
-  } catch (error) {
-      console.error('Error fetching courses data:', error);
-  }
-};
+    };
     fetchQuestions();
   }, []);
 
@@ -58,10 +53,10 @@ const Faqs = () => {
     );
   };
 
-  const handleShowFaq = (id: number) => {
+  const handleShowFaq = (index: number) => {
     setVisibleFaq((visibleFaq) => {
-      const temp = [...initialFaq];
-      temp[id] = !visibleFaq[id];
+      const temp = [...visibleFaq];
+      temp[index] = !visibleFaq[index];
       return temp;
     });
   };
@@ -69,7 +64,13 @@ const Faqs = () => {
   const handleAddQuestion = async () => {
     if (selectedQuestion) {
       try {
-        const response = await axios.post("http://localhost:8080/api/v1/questions/upload", { name: selectedQuestion });
+        const token = localStorage.getItem('token');
+        const response = await axios.post("http://localhost:8080/api/v1/questions/upload", { name: selectedQuestion }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         if (response.data.success) {
           setQuestionData([...questionData, response.data.question]);
           setSelectedQuestion("");
@@ -107,13 +108,13 @@ const Faqs = () => {
                 </h1>
                 <Image src={`${visibleFaq[index] ? "/assets/add-rotated.svg" : "/assets/add.svg"}`} alt="" width={25} height={20} className={`${visibleFaq[index] && "rotate-45"} transition-all`} />
               </button>
-              <p className={`transition-all duration-300 bg-gray-900 p-2 rounded-xl md:ml-[11%] mt-[2vh] ${visibleFaq[index] ? "block" : "hidden"}`}>
+              <div className={`transition-all duration-300 bg-gray-900 p-2 rounded-xl md:ml-[11%] mt-[2vh] ${visibleFaq[index] ? "block" : "hidden"}`}>
                 {item.desc.map((descItem, descIndex) => (
-                  <p key={descIndex} className="bg-black rounded-xl mb-2 p-2 opacity-90">
+                  <div key={descIndex} className="bg-black rounded-xl mb-2 p-2 opacity-90">
                     <div>{descIndex + 1} : {descItem}</div>
-                  </p>
+                  </div>
                 ))}
-              </p>
+              </div>
               <CardFooter reply="Reply" report="Report" />
             </div>
           ))}
@@ -124,7 +125,7 @@ const Faqs = () => {
           <div className="flex flex-col w-full h-full bg-gray-900 bg-opacity-50">
             <h1 className="text-xl">Ask a question</h1>
             <div className="flex flex-row items-start w-full h-full mt-8 mb-3">
-              <input type="text" name="" id="" placeholder="Type your question here..." className="text-black rounded-xl h-full w-full" value={selectedQuestion} onChange={(e) => setSelectedQuestion(e.target.value)} />
+              <input type="text" placeholder="Type your question here..." className="text-black rounded-xl h-full w-full" value={selectedQuestion} onChange={(e) => setSelectedQuestion(e.target.value)} />
             </div>
             <div className="flex flex-row justify-around items-center w-full mt-8 mb-3">
               <button onClick={handleAddQuestion} className="bg-blue-500 text-white px-4 py-2 rounded-md">Add</button>
