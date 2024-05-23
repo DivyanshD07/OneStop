@@ -1,25 +1,27 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Card from "@/components/Cards/CourseCard";
 import { FaUpload } from 'react-icons/fa6';
 
-interface CoursesInfo {
+interface CourseInfo {
     id: number;
     name: string;
 }
 
 export default function Home() {
-    const departmentIdStr = useSearchParams().get('departmentId'); // Extract department ID from query parameters
+    const searchParams = useSearchParams();
+    const departmentIdStr = searchParams.get('departmentId'); // Extract department ID from query parameters
     const departmentId = departmentIdStr ? parseInt(departmentIdStr) : null; // Convert string to integer
-    console.log(departmentId);
+
     const [showForm, setShowForm] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState("");
-    const [coursesData, setCoursesData] = useState<CoursesInfo[]>([]);
+    const [coursesData, setCoursesData] = useState<CourseInfo[]>([]);
 
     useEffect(() => {
         const fetchCoursesData = async () => {
+            if (departmentId !== null) {
                 try {
                     const token = localStorage.getItem('token');
                     const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
@@ -28,21 +30,22 @@ export default function Home() {
                         }
                     });
                     if (response.data.success && response.data.courses) {
-                        const CourseNames = response.data.courses.map((courses: any) => ({
-                            id: courses.id,
-                            name: courses.name,
+                        const courseNames = response.data.courses.map((course: any) => ({
+                            id: course.id,
+                            name: course.name,
                         }));
-                        setCoursesData(CourseNames);
+                        setCoursesData(courseNames);
                     } else {
                         console.error('Error: Response does not contain courses');
                     }
                 } catch (error) {
                     console.error('Error fetching courses data:', error);
                 }
+            }
         };
 
         fetchCoursesData();
-    }, []);
+    }, [departmentId]); // Depend on departmentId to refetch when it changes
 
     const handleAddCourse = async () => {
         if (selectedCourse) {
