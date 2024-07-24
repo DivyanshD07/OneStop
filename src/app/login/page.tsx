@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import axios from "axios";
+// import axios from "axios";
 import { FaFacebook, FaGoogle, FaLinkedin, FaLock, FaRegEnvelope } from 'react-icons/fa6';
 import { FaFacebookF } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -12,23 +12,23 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = async () => {
-    try {
-      // Make API request to login endpoint
-      const response = await axios.post('http://localhost:8080/api/v1/loging', {
-        email,
-        password
-      });
-      // If login successful, store JWT token in local storage
-      localStorage.setItem('token', response.data.jwt);
-      // Redirect user to desired page, e.g., dashboard
-      router.push('/DashBoard');
-    } catch (error) {
-      alert('Login failed, try again');
-      console.error('Login failed:', error);
-      // Handle login failure, show error message, etc.
-    }
-  };
+  // const handleLogin = async () => {
+  //   try {
+  //     // Make API request to login endpoint
+  //     const response = await axios.post('http://localhost:8080/api/v1/loging', {
+  //       email,
+  //       password
+  //     });
+  //     // If login successful, store JWT token in local storage
+  //     localStorage.setItem('token', response.data.jwt);
+  //     // Redirect user to desired page, e.g., dashboard
+  //     router.push('/DashBoard');
+  //   } catch (error) {
+  //     alert('Login failed, try again');
+  //     console.error('Login failed:', error);
+  //     // Handle login failure, show error message, etc.
+  //   }
+  // };
 
   return (
     <main className="flex items-center justify-center w-full flex-1 px-20 text-center bg-black">
@@ -61,7 +61,7 @@ const Login = () => {
               />
             </div>
             
-            <button className="text-black border-2 py-1 px-5 hover:bg-blue-600 hover:text-white rounded-2xl mt-1" onClick={handleLogin}>
+            <button className="text-black border-2 py-1 px-5 hover:bg-blue-600 hover:text-white rounded-2xl mt-1">
               Sign in
             </button>
           </div>

@@ -29,7 +29,7 @@ const LoginSignup = () => {
 
   return (
     <main className="flex items-center justify-center w-full flex-1 px-20 text-center bg-black">
-      <div className="bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl flex-row">
+      <div className="bg-white rounded-2xl shadow-2xl flex ml-1/3 max-w-4xl flex-row">
         <div className="flex flex-col justify-center items-center p-5 hoveranimationsignin" style={{ width: showSignupForm ? 'w-3/5' : 'w-full' }}>
           <p className="text-black font-bold md:text-2xl mb-2">Sign in to Account</p>
           <div className="border-2 w-10 border-blue-700 inline-block mb-2"></div>

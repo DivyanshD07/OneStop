@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import axios from 'axios';
+// import axios from 'axios';
 import Card from "@/components/Cards/CourseCard";
 import { FaUpload } from 'react-icons/fa6';
 
@@ -15,61 +15,75 @@ export default function Home() {
     const departmentId = departmentIdStr ? parseInt(departmentIdStr) : null; // Convert string to integer
     const [showForm, setShowForm] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState("");
-    const [coursesData, setCoursesData] = useState<CoursesInfo[]>([]);
+    const [coursesData, setCoursesData] = useState<CoursesInfo[]>([
+        { id: 1, name: 'Computer Science' },
+        { id: 2, name: 'Business Administration' },
+        { id: 3, name: 'Biotechnology' },
+        { id: 4, name: 'Physics' },
+    ]);
 
-    const fetchCoursesData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log('API Response:', response);
-            if (response.data.success && response.data.courses) {
-                const courseNames = response.data.courses.map((course: any) => ({
-                    id: course.id,
-                    name: course.name,
-                }));
-                setCoursesData(courseNames);
-            } else {
-                console.error('Error: Response does not contain courses', response.data);
-            }
-        } catch (error) {
-            console.error('Error fetching courses data:', error);
-        }
-    };
+    // const fetchCoursesData = async () => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.get(`http://localhost:8080/api/v1/courses/department/${departmentId}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         console.log('API Response:', response);
+    //         if (response.data.success && response.data.courses) {
+    //             const courseNames = response.data.courses.map((course: any) => ({
+    //                 id: course.id,
+    //                 name: course.name,
+    //             }));
+    //             setCoursesData(courseNames);
+    //         } else {
+    //             console.error('Error: Response does not contain courses', response.data);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching courses data:', error);
+    //     }
+    // };
 
-    useEffect(() => {
-        if (departmentId !== null) {
-            fetchCoursesData();
-        }
-    }, [departmentId]);
+    // useEffect(() => {
+    //     if (departmentId !== null) {
+    //         fetchCoursesData();
+    //     }
+    // }, [departmentId]);
 
     const handleAddCourse = async () => {
         if (selectedCourse) {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.post(
-                    `http://localhost:8080/api/v1/departments/${departmentId}/courses/upload`,
-                    { name: selectedCourse },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-                if (response.data.success) {
-                    fetchCoursesData(); // Re-fetch courses after adding a new one
-                    setSelectedCourse("");
-                    setShowForm(false);
-                } else {
-                    console.error('Error: Course upload failed', response.data);
-                }
-            } catch (error) {
-                console.error('Error uploading course:', error);
-            }
+            const newCourse: CoursesInfo = {
+                id: coursesData.length + 1, // Generate a new id
+                name: selectedCourse,
+            };
+            setCoursesData([...coursesData, newCourse]);
+            setSelectedCourse("");
+            setShowForm(false);
         }
+        // if (selectedCourse) {
+        //     try {
+        //         const token = localStorage.getItem('token');
+        //         const response = await axios.post(
+        //             `http://localhost:8080/api/v1/departments/${departmentId}/courses/upload`,
+        //             { name: selectedCourse },
+        //             {
+        //                 headers: {
+        //                     Authorization: `Bearer ${token}`
+        //                 }
+        //             }
+        //         );
+        //         if (response.data.success) {
+        //             fetchCoursesData(); // Re-fetch courses after adding a new one
+        //             setSelectedCourse("");
+        //             setShowForm(false);
+        //         } else {
+        //             console.error('Error: Course upload failed', response.data);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error uploading course:', error);
+        //     }
+        // }
     };
 
     return (
@@ -83,7 +97,7 @@ export default function Home() {
                     <button onClick={() => setShowForm(true)}>Upload</button>
                 </div>
             </div>
-            <div className="w-1/2 grid grid-cols-2 gap-4">
+            <div className="w-1/2 md:grid md:grid-cols-2 md:gap-4 flex flex-col">
                 {coursesData.map((course) => (
                     <Card key={course.id} Course={course} />
                 ))}

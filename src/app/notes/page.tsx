@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Card from "@/components/Cards/NotesCard";
 import { FaUpload } from 'react-icons/fa6';
-import axios from 'axios';
+// import axios from 'axios';
 
 interface NotesInfo {
     id: number;
@@ -18,69 +18,83 @@ export default function Home() {
 
     const [showForm, setShowForm] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [notesData, setNotesData] = useState<NotesInfo[]>([]);
+    const [notesData, setNotesData] = useState<NotesInfo[]>([
+        { id: 1, name: 'Lecture 1', download: 'https://example.com/lecture1' },
+        { id: 2, name: 'Lecture 2', download: 'https://example.com/lecture2' },
+        { id: 3, name: 'Lecture 3', download: 'https://example.com/lecture3' },
+    ]);
 
-    useEffect(() => {
-        const fetchNotesData = async () => {
-            if (courseId !== null) {
-                try {
-                    const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:8080/api/v1/notes/${courseId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    console.log("API Response: ", response);
+    // useEffect(() => {
+    //     const fetchNotesData = async () => {
+    //         if (courseId !== null) {
+    //             try {
+    //                 const token = localStorage.getItem('token');
+    //                 const response = await axios.get(`http://localhost:8080/api/v1/notes/${courseId}`, {
+    //                     headers: {
+    //                         Authorization: `Bearer ${token}`
+    //                     }
+    //                 });
+    //                 console.log("API Response: ", response);
 
-                    if (response.data.success && Array.isArray(response.data.notes)) {
-                        const notesNames = response.data.notes.map((note: any) => ({
-                            id: note.id,
-                            name: note.fileName,
-                            download: note.downloadUrl,
-                        }));
-                        setNotesData(notesNames);
-                    } else {
-                        console.error('Error: Response does not contain notes or success is false', response.data);
-                    }
-                } catch (error) {
-                    console.error('Error fetching notes data:', error);
-                }
-            }
-        };
+    //                 if (response.data.success && Array.isArray(response.data.notes)) {
+    //                     const notesNames = response.data.notes.map((note: any) => ({
+    //                         id: note.id,
+    //                         name: note.fileName,
+    //                         download: note.downloadUrl,
+    //                     }));
+    //                     setNotesData(notesNames);
+    //                 } else {
+    //                     console.error('Error: Response does not contain notes or success is false', response.data);
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching notes data:', error);
+    //             }
+    //         }
+    //     };
 
-        fetchNotesData();
-    }, [courseId]);
+    //     fetchNotesData();
+    // }, [courseId]);
 
     const handleAddNotes = async () => {
         if (selectedFile) {
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.post(
-                    `http://localhost:8080/api/v1/notes/${courseId}/upload`,
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                if (response.data.success) {
-                    const newNote = response.data.note;
-                    setNotesData([...notesData, newNote]);
-                    setSelectedFile(null);
-                    setShowForm(false);
-                } else {
-                    console.error('Error: Notes upload failed', response.data);
-                }
-            } catch (error) {
-                console.error('Error uploading notes:', error);
-            }
+            const newNote: NotesInfo = {
+                id: notesData.length + 1,
+                name: selectedFile.name,
+                download: URL.createObjectURL(selectedFile),
+            };
+            setNotesData([...notesData, newNote]);
+            setSelectedFile(null);
+            setShowForm(false);
         }
+        // if (selectedFile) {
+        //     const formData = new FormData();
+        //     formData.append('file', selectedFile);
+
+        //     try {
+        //         const token = localStorage.getItem('token');
+        //         const response = await axios.post(
+        //             `http://localhost:8080/api/v1/notes/${courseId}/upload`,
+        //             formData,
+        //             {
+        //                 headers: {
+        //                     'Content-Type': 'multipart/form-data',
+        //                     Authorization: `Bearer ${token}`
+        //                 }
+        //             }
+        //         );
+
+        //         if (response.data.success) {
+        //             const newNote = response.data.note;
+        //             setNotesData([...notesData, newNote]);
+        //             setSelectedFile(null);
+        //             setShowForm(false);
+        //         } else {
+        //             console.error('Error: Notes upload failed', response.data);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error uploading notes:', error);
+        //     }
+        // }
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

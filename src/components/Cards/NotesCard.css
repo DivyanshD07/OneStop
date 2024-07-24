@@ -11,12 +11,12 @@
     margin-bottom: 0.5vh;
 }
 
-.Notescard h1{
+/* .Notescard h1{
     font-size: 1.5rem;
     font-weight: bold;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-}
+} */
 
 .Notescard:hover{
     background-color: #198cff;
