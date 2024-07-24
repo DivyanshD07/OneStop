@@ -14,7 +14,7 @@ const DashBoard = () => {
     },
     {
       id:"PYQ",
-      service: "departmentPYQ",
+      service: "department",
     },
     {
       id:"Q&A",
