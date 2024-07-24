@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Card from "@/components/Cards/NotesCard";
 import { FaUpload } from 'react-icons/fa6';
@@ -11,7 +11,7 @@ interface NotesInfo {
     download: string;
 }
 
-export default function Home() {
+function NotesComponent() {
     const searchParams = useSearchParams();
     const courseIdStr = searchParams.get('courseId');
     const courseId = courseIdStr ? parseInt(courseIdStr) : null;
@@ -139,5 +139,12 @@ export default function Home() {
                 </div>
             )}
         </div>
+    );
+}
+
+
+export default function Home() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}><NotesComponent/></Suspense>
     );
 }

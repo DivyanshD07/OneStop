@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 // import axios from 'axios';
 import Card from "@/components/Cards/CourseCard";
@@ -10,7 +10,7 @@ interface CoursesInfo {
     name: string;
 }
 
-export default function Home() {
+function CourseComponent() {
     const departmentIdStr = useSearchParams().get('departmentId'); // Extract department ID from query parameters
     const departmentId = departmentIdStr ? parseInt(departmentIdStr) : null; // Convert string to integer
     const [showForm, setShowForm] = useState(false);
@@ -121,4 +121,12 @@ export default function Home() {
             )}
         </div>
     );
+}
+
+
+export default function Home() {
+    <Suspense fallback={<div>Loading...</div>
+    } >
+        <CourseComponent/>
+    </Suspense>
 }
